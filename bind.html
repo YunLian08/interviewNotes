@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	
+</head>
+<body>
+    <script>
+        function func(){
+            console.log(this.value)
+        }
+        var obj ={
+            value: '13'
+        }
+        Function.prototype.myCall = function(obj){
+           
+            var args = [];
+            for(var i=1;i<arguments.length;i++){
+                args.push('arguments['+ i +']');
+            }//实现可传参
+            obj = obj || window;
+            obj.fn = this;//指定this值
+            var result = eval('obj.fn(' + args + ')');
+            delete obj.fn;
+            return result;
+        }
+        Function.prototype.myApply = function(obj,arr){
+            obj = obj || window;
+            obj.func = this;
+            var result;
+            if(!arr){
+                result = obj.func;
+            }else{
+                var args = [];
+                for(var i=0;i<arguments.length;i++){
+                    args.push('arguments[' + i + ']');
+                }
+                result = eval('obj.func(' + args + ')');
+            }
+            delete obj.func;
+            return result;
+        }
+        
+        Function.prototype.myBind = function (context) {
+            if (typeof this !== "function") {
+                throw new Error(this + "is not a function");
+            }
+            var self = this;
+            var args = [];
+            for (var i = 1, len = arguments.length; i < len; i++) {
+                args.push(arguments[i]);
+            }
+        
+            var fbound = function () {
+                var bindArgs = Array.prototype.slice.call(arguments);
+                self.apply(this instanceof self ? this : context, args.concat(bindArgs));
+            }
+            fbound.prototype = Object.create(self.prototype);
+            //返回的函数不仅要和 被调函数的函数体相同，也要继承人家的原型链
+            return fbound;
+        }
+
+        Function.prototype.myBind2 = function (context) {
+            if (typeof this !== 'function') {
+                throw new TypeError('Error')
+            }
+            const _this = this
+            const args = [...arguments].slice(1)
+            // 返回一个函数
+            return function F() {
+                // 因为返回了一个函数，我们可以 new F()，所以需要判断
+                if (this instanceof F) {
+                return new _this(...args, ...arguments)
+                }
+                return _this.apply(context, args.concat(...arguments))
+            }
+        }
+        
+        func.myCall(obj);
+        func.myApply(obj,[1,2,3]);
+        func.myBind2(obj);
+    </script>
+
+</body>
+</html>
