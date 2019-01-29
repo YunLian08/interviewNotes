@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	
+</head>
+<body>
+    <script>
+        //创建3个常量表示状态
+        const PENDING = 'pending';
+        const RESOLVED = 'resolved';
+        const REJECTED = 'rejected';
+
+        function myPromise (fn){
+            const _this = this;//that获取正确的当前this
+            _this.state = PENDING;//一开始promise状态为pending
+            _this.value = null;//value保存resolve、reject传入的值
+            _this.resolvedCallbacks = [];
+            _this.rejectedCallbacks = [];//用于保存then中的回调
+        }
+
+        function resolve (value){
+            if(_this.state === PENDING){//只有等待态才可以改变状态
+                _this.state = RESOLVED;
+                _this.value = value;
+                _this.resolveCallbacks.map(cd => cd(_this.value));
+            }
+        }
+
+        function reject (value){
+            if(_this.state === PENDING){
+                _this.state = REJECTED;
+                _this.value = value;
+                _this.rejectCallbacks.map(cd => cd(_this.value));
+                
+            }
+        }
+         
+        try {
+            fn(resolve,reject)
+        }catch(e){
+            reject(e);
+        }
+
+        myPromise.prototype.then = function (onFulfilled,onRejected){
+            const _this = this;
+            onFulfilled = typeof onFulfilled === 'function' ? 'onFulfilled' : v => v;
+            onRejected = typeof onRejected === 'function' ? 'onRejected' : r => { throw r}
+           // 当参数不是函数类型时，需要创建一个函数赋值给对应的参数
+            if(_this.state === PENDING) {
+                _this.resolveCallbacks.push(onFulfilled)
+                _this.rejectCallbacks.push(onRejected)
+            }
+            if(_this.state === REDOLVED) {
+                onFulfilled(_this.value)
+            }
+            if(_this.state === REJECTED) {
+                onRejected(_this.value)
+            }
+        }
+    </script>
+
+</body>
+</html>
