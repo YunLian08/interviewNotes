@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>deepCopy</title>
+    </head>
+    <body>
+        <script>
+            var obj={
+                name:"liming",
+                age:"23"
+            };
+            var deepCopy=function (source){
+                var result={};
+                for(var key in source){
+                    if(typeof source[key]==='object'){
+                        result[key]=deepCopy(source[key]);
+                    }else{
+                        result[key]=source[key];
+                    }
+                }
+                return result;
+            };
+            var objCopy=deepCopy(obj);
+            obj.name='susan';
+            console.log(obj);
+            console.log(objCopy);
+        </script>
+    </body>
+</html>
