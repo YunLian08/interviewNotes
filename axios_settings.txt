@@ -1,0 +1,49 @@
+//axios请求主要配置
+axios({
+	url:'',//将用于请求的服务器url
+
+	method:'post',//请求方式，默认get
+
+	baseUrl:'',//被添加到url前面，除非url是绝对的，方便相对url传递给该实例方法
+
+	transformRequest:[function(data){
+		//对data进行任意转换处理
+		return data
+	}],//允许在向服务器发送前修改请求数据，只能用在 'PUT', 'POST' 和 'PATCH' 这几个请求方法，后面数组中的函数必须返回一个字符串，或 ArrayBuffer，或 Stream
+
+	transformResponse:[function(data){
+		..   
+		return data
+	}],//在传递给 then/catch 前，允许修改响应数据
+
+	headers: {
+      "content-type": "application/json"
+    },//即将被发送的自定义请求头
+
+    params:{
+    	data:''
+    },//与请求一起发送的url参数
+
+    paramsSerializer: function(params) {
+	    return Qs.stringify(params, {arrayFormat: 'brackets'})
+	},//负责 `params` 序列化的函数
+
+	data:'',//作为请求主体被发送的数据
+
+	timeout:1000,//请求超时的毫秒数，请求超过timeout，请求将被中断
+
+	withCredentials:false,//默认false，跨域请求时是否需要试用品正
+
+	responseType:'json',//服务器响应的数据类型，默认
+
+	maxContentLength:2000,//允许响应内容的最大尺寸
+
+	validateStatus: function (status) {
+      return status >= 200 && status < 302; // 默认的
+    },//定义对于给定的HTTP 响应状态码是 resolve 或 reject  promise 。如果 `validateStatus` 返回 `true` (或者设置为 `null` 或 `undefined`)，promise 将被 resolve; 否则，promise 将被 rejecte
+
+    maxRedirects:5,//默认，定义在node.js中follow的最大重定向项数，如果设置为0，将不会follow任何重定向
+
+
+
+})

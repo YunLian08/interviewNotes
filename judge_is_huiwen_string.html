@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>判断输入是否为回文字符串</title>
+</head>
+<body>
+	<script>
+		function run (input){
+			if(typeof input !== "string") return false;
+			return input.split('').reverse().join('') == input;
+		}
+		var str="12345";
+		run(str);
+	</script>
+</body>
+</html>
