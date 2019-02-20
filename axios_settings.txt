@@ -42,8 +42,27 @@ axios({
       return status >= 200 && status < 302; // 默认的
     },//定义对于给定的HTTP 响应状态码是 resolve 或 reject  promise 。如果 `validateStatus` 返回 `true` (或者设置为 `null` 或 `undefined`)，promise 将被 resolve; 否则，promise 将被 rejecte
 
-    maxRedirects:5,//默认，定义在node.js中follow的最大重定向项数，如果设置为0，将不会follow任何重定向
-
-
-
+    maxRedirects:5//默认，定义在node.js中follow的最大重定向项数，如果设置为0，将不会follow任何重定向
 })
+
+// 添加请求拦截器
+axios.interceptors.request.use(function (config) {
+    // 在发送请求之前做些什么
+    return config;
+  }, function (error) {
+    // 对请求错误做些什么
+    return Promise.reject(error);
+  });
+
+// 添加响应拦截器
+axios.interceptors.response.use(function (response) {
+    // 对响应数据做点什么
+    return response;
+  }, function (error) {
+    // 对响应错误做点什么
+    return Promise.reject(error);
+  });
+
+//稍后移除拦截器
+var myInterceptor = axios.interceptors.request.use(function () {/*...*/});
+axios.interceptors.request.eject(myInterceptor);
