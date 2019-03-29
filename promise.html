@@ -8,57 +8,98 @@
 <body>
     <script>
         //创建3个常量表示状态
-        const PENDING = 'pending';
-        const RESOLVED = 'resolved';
-        const REJECTED = 'rejected';
+        // const PENDING = 'pending';
+        // const RESOLVED = 'resolved';
+        // const REJECTED = 'rejected';
 
-        function myPromise (fn){
-            const _this = this;//that获取正确的当前this
-            _this.state = PENDING;//一开始promise状态为pending
-            _this.value = null;//value保存resolve、reject传入的值
-            _this.resolvedCallbacks = [];
-            _this.rejectedCallbacks = [];//用于保存then中的回调
-        }
+        // function myPromise (fn){
+        //     const _this = this;//_this获取正确的当前this
+        //     _this.state = PENDING;//一开始promise状态为pending
+        //     _this.value = null;//value保存resolve、reject传入的值
+        //     _this.resolvedCallbacks = [];
+        //     _this.rejectedCallbacks = [];//用于保存then中的回调
+        // }
 
-        function resolve (value){
-            if(_this.state === PENDING){//只有等待态才可以改变状态
-                _this.state = RESOLVED;
-                _this.value = value;
-                _this.resolveCallbacks.map(cd => cd(_this.value));
-            }
-        }
+        // function resolve (value){
+        //     if(_this.state === PENDING){//只有等待态才可以改变状态
+        //         _this.state = RESOLVED;
+        //         _this.value = value;
+        //         _this.resolveCallbacks.map(cd => cd(_this.value));
+        //     }
+        // }
 
-        function reject (value){
-            if(_this.state === PENDING){
-                _this.state = REJECTED;
-                _this.value = value;
-                _this.rejectCallbacks.map(cd => cd(_this.value));
+        // function reject (value){
+        //     if(_this.state === PENDING){
+        //         _this.state = REJECTED;
+        //         _this.value = value;
+        //         _this.rejectCallbacks.map(cd => cd(_this.value));
                 
-            }
-        }
+        //     }
+        // }
          
-        try {
-            fn(resolve,reject)
-        }catch(e){
-            reject(e);
-        }
+        // try {
+        //     fn(resolve,reject)
+        // }catch(e){
+        //     reject(e);
+        // }
 
-        myPromise.prototype.then = function (onFulfilled,onRejected){
-            const _this = this;
-            onFulfilled = typeof onFulfilled === 'function' ? 'onFulfilled' : v => v;
-            onRejected = typeof onRejected === 'function' ? 'onRejected' : r => { throw r}
-           // 当参数不是函数类型时，需要创建一个函数赋值给对应的参数
-            if(_this.state === PENDING) {
-                _this.resolveCallbacks.push(onFulfilled)
-                _this.rejectCallbacks.push(onRejected)
+        // myPromise.prototype.then = function (onFulfilled,onRejected){
+        //     const _this = this;
+        //     onFulfilled = typeof onFulfilled === 'function' ? 'onFulfilled' : v => v;
+        //     onRejected = typeof onRejected === 'function' ? 'onRejected' : r => { throw r}
+        //    // 当参数不是函数类型时，需要创建一个函数赋值给对应的参数
+        //     if(_this.state === PENDING) {
+        //         _this.resolveCallbacks.push(onFulfilled)
+        //         _this.rejectCallbacks.push(onRejected)
+        //     }
+        //     if(_this.state === REDOLVED) {
+        //         onFulfilled(_this.value)
+        //     }
+        //     if(_this.state === REJECTED) {
+        //         onRejected(_this.value)
+        //     }
+        // }
+
+        function myPromise1(constructor){
+            let self=this;
+            self.status="pending" //定义状态改变前的初始状态
+            self.value=undefined;//定义状态为resolved的时候的状态
+            self.reason=undefined;//定义状态为rejected的时候的状态
+            function resolve(value){
+                //两个==="pending"，保证了状态的改变是不可逆的
+            if(self.status==="pending"){
+                self.value=value;
+                self.status="resolved";
             }
-            if(_this.state === REDOLVED) {
-                onFulfilled(_this.value)
             }
-            if(_this.state === REJECTED) {
-                onRejected(_this.value)
+            function reject(reason){
+                //两个==="pending"，保证了状态的改变是不可逆的
+            if(self.status==="pending"){
+                self.reason=reason;
+                self.status="rejected";
+            }
+            }
+            //捕获构造异常
+            try{
+            constructor(resolve,reject);
+            }catch(e){
+            reject(e);
             }
         }
+        myPromise1.prototype.then=function(onFullfilled,onRejected){
+            let self=this;
+            switch(self.status){
+                case "resolved":
+                    onFullfilled(self.value);
+                    break;
+                case "rejected":
+                    onRejected(self.reason);
+                    break;
+                default:       
+            }
+        }
+        var p=new myPromise1(function(resolve,reject){resolve(1)});
+        p.then(function(x){console.log(x)})
     </script>
 
 </body>

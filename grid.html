@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<style>
+		.item-a{
+			grid-area: header;
+		}
+		.item-b{
+			grid-area:main;
+		}
+		.item-c {
+		  grid-area: sidebar;
+		}
+		.item-d {
+		  grid-area: footer;
+		}
+
+		.contain{
+			display:grid;
+			width:500px;
+			height:500px;
+			grid-template-columns:1fr 50px 1fr 1fr;
+			grid-template-rows:1fr 1fr 1fr; 
+			grid-template-areas:
+			"header header header header"
+		    "main main . sidebar"
+		    "footer footer footer footer";
+		    grid-column-gap:10px;
+		    grid-row-gap:15px;
+		    /*可简写成grid-gap:15px 10px; 若行列一样写一个即可*/
+		    justify-items: center;
+		    align-items:left;
+		    /*可简写成place-items：left center;*/
+		    justify-content: center;
+		    align-content: left;
+		    /*可简写成place-content:left center;行列对其方式*/
+		}
+	</style>
+</head>
+<body>
+<div class="contain"></div>
+</body>
+</html>

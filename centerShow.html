@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>定宽高或不定宽高垂直居中显示</title>
+	<style>
+		/*.wrapper{
+			position:relative;
+		}*/
+		/*.box{
+			position:absolute;
+			top:50%;
+			left:50%;
+			height:100px;
+			margin:-50px 0 0 -50px;
+		}*/
+		/*.box{
+			position:absolute;
+			height:100px;
+			top:50%;
+			left:50%;
+			translate:transform(-50%,-50%);
+		}*/
+		
+
+		/*.wrapper{
+			display:flex;
+		}
+		.box{
+			display:flex;
+			justify-content:center;
+			align-items:center;
+			height:100px;
+		}*/
+		.wrapper{
+			display:table;
+		}
+		.box{
+			width:100px;
+			height:100px;
+			display:table-cell;
+			vertical-align:middle;
+			text-align:center;
+		}
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="box"></div>
+	</div>
+</body>
+</html>

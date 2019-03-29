@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>实现MVVM数据双向绑定效果</title>
+</head>
+<body>
+	<input id="input">
+	<script type="text/javascript">
+		const data={};
+		var Oinput=document.getElementById('input');
+		Object.defineProperty(data,'text',{
+			set(value){
+				input.value=value;
+				this.value=value;
+			}
+		});
+		input.onchange=function(e){
+			data.text=e.target.value;
+		}
+	</script>
+</body>
+</html>
