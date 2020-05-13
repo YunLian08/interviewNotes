@@ -1,0 +1,49 @@
+<html>
+  <head></head>
+  <body>
+    <script>
+  // 斐波那契数列  0 1 1 2 3 5 8 ...
+  
+  //1. 递归
+  let fibnaci = n => n <= 0 ? 0 : n == 1 ? 1 : fibnaci(n-2) + fibnaci(n-1);//性能 时间复杂度 指数级
+
+  //2. 迭代  时间复杂度O(n)
+  let fibnaci1 = n =>{
+    if(n == 0){
+      return 0;
+    }
+    let a1 = 0, a2 = 1;
+    for(let i = 1;i < n; i++){
+      [a1, a2] = [a2, a1 + a2];
+    }
+    return a2;
+  }
+
+  //3. 求解斐波那契数列通项公式   幂运算 时间复杂度 O(log(n))  不断用平方逼近n
+  let fibnaci2 = n => (Math.pow((1 + Math.sqrt(5))/2, n) - Math.pow((1 - Math.sqrt(5))/2, n)) / Math.sqrt(5);
+
+  //4. 矩阵
+  let matrix22_mul = (x,y) => 
+  [
+    [x[0][0] * y[0][0] + x[0][1] * y[1][0], x[0][0] * y[0][1] + x[0][1] * y[1][1]],
+    [x[1][0] * y[0][0] + x[1][1] * y[1][0], x[1][0] * y[0][1] + x[1][1] * y[1][1]],
+  ]
+  let matrix22_pow = (x,n) => {
+    var r = [[1,0],[0,1]];
+    var v = x;
+    while(n) {
+      if(n % 2 == 1){
+        r = matrix22_mul(r,v);
+        n -= 1;
+      }
+      v = matrix22_mul(v,v);
+      n = n / 2;
+    }
+    return r;
+  }
+  let fibnaci3 = n => n <= 0 ? 0 : 
+    matrix22_mul([[0,1][0,0]], matrix22_pow([[0,1],[1,1]], n - 1))[0][1];
+
+    </script>
+  </body>
+</html>
